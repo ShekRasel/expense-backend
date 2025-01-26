@@ -20,6 +20,7 @@ import { AdminService } from 'src/admin/admin/admin.service';
 import { ConfigService } from '@nestjs/config';
 import { MailerService } from '@nestjs-modules/mailer';
 import { JwtService } from '@nestjs/jwt';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -30,13 +31,16 @@ export class UserService {
     private mailerService: MailerService,
     private jwtService: JwtService,
   ) {}
+
   async findOne(logindata: UserLoginDTO): Promise<any> {
     return await this.userRepo.findOneBy({ email: logindata.email });
   }
+
   async changeRole(user: User, newRole: string): Promise<User> {
     user.role = newRole;
     return this.userRepo.save(user);
   }
+
   async promoteToAdmin(email: string): Promise<Admin> {
     const user = await this.findbyEmail(email);
 
@@ -61,15 +65,19 @@ export class UserService {
   async findbyEmail(email: string) {
     return await this.userRepo.findOne({ where: { email: email } });
   }
+
   async findbyUsername(username: string) {
     return await this.userRepo.findOne({ where: { username: username } });
   }
+
   async addUser(myobj: CreateUserDTO): Promise<object> {
     return await this.userRepo.save(myobj);
   }
+
   async findbyid(id: number) {
     return await this.userRepo.findOne({ where: { id: id } });
   }
+
   async update(id: any, userUpdate: CreateUserDTO) {
     // Hash password if needed
     if (userUpdate.password) {
@@ -86,11 +94,13 @@ export class UserService {
   async deleteuser(id: number) {
     return await this.userRepo.delete(id);
   }
+
   async getUsers(subString: string): Promise<User[]> {
     return await this.userRepo.find({
       where: { fullname: Like(`%${subString}%`) },
     });
   }
+
   async forgetPassword(
     forgetPasswordDto: ForgetPasswordDto,
   ): Promise<{ message: string }> {
@@ -126,6 +136,7 @@ export class UserService {
       message: 'If that email is registered, a reset link has been sent.',
     };
   }
+
   async updatePassword(
     updatePasswordDto: UpdatePasswordDto,
   ): Promise<{ message: string }> {

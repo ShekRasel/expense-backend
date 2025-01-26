@@ -20,9 +20,11 @@ import { AuthUserGuard } from '../auth/authUser.guard';
 import { AuthAdminGuard } from 'src/admin/auth/authAdmin.guard';
 import { PromoteAdminDTO } from 'src/admin/DTO/LoginDTO.dto';
 import { Admin } from 'src/entity/admin.entity';
+
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
   @Patch('user/update')
   @UseGuards(AuthUserGuard)
   async updateUser(
@@ -46,6 +48,7 @@ export class UserController {
     }
     return this.userService.update(user.id, userUpdateDto);
   }
+
   @Post('user/delete')
   @UseGuards(AuthAdminGuard)
   async deleteUser(@Req() request: Request) {
@@ -61,12 +64,14 @@ export class UserController {
     }
     return this.userService.deleteuser(user.id);
   }
+
   @Get('user/:username')
   @UseGuards(AuthAdminGuard)
   async findUserByUsername(@Param('username') username: string) {
     const user = await this.userService.findbyEmail(username);
     return user;
   }
+
   @Post('adminpromote')
   @UseGuards(AuthAdminGuard)
   async giveAdminRole(
@@ -87,16 +92,35 @@ export class UserController {
       throw error;
     }
   }
+
   @Post('forgetpassword')
   async forgetPassword(
     @Body() forgetPasswordDto: ForgetPasswordDto,
   ): Promise<{ message: string }> {
     return this.userService.forgetPassword(forgetPasswordDto);
   }
+
   @Post('updatepassword')
   async updatePassword(
     @Body() updatePasswordDto: UpdatePasswordDto,
   ): Promise<{ message: string }> {
     return this.userService.updatePassword(updatePasswordDto);
+  }
+
+  // New route to get the logged-in user's profile
+  @Get('profile')
+  @UseGuards(AuthUserGuard)
+  async getUserProfile(@Req() request: Request) {
+    const authenticatedUser = request['user'];
+    if (!authenticatedUser) {
+      throw new UnauthorizedException('User not authenticated');
+    }
+
+    const userId = authenticatedUser.sub;
+    const user = await this.userService.findbyid(userId);
+    if (!user) {
+      throw new NotFoundException(`User with id=${userId} not found`);
+    }
+    return user;
   }
 }

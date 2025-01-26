@@ -16,37 +16,35 @@ export class AuthService {
     private jwtService: JwtService,
     private expenseService: ExpenseService,
   ) {}
-  async signUp(myobj: CreateUserDTO): Promise<object> {
+
+  // Modified signUp method to include token generation
+  async signUp(myobj: CreateUserDTO): Promise<{ access_token: string }> {
+    // Create a new user from the provided DTO
     const newUser = this.userRepo.create(myobj);
+    
+    // Save the new user to the database
     const savedUser = await this.userRepo.save(newUser);
+
+    // Optionally, create default expenses or other related data for the user
     await this.expenseService.createExpenseWithUserId(savedUser.id);
-    return savedUser;
-  }
-  /*async signIn(logindata: UserLoginDTO): Promise<{ access_token: string }> {
-    console.log('SignIn Attempt:', logindata.email);
-    const user = await this.userService.findOne(logindata);
-    if (!user) {
-      console.error('User not found:', logindata.email);
-      throw new UnauthorizedException('Invalid credentials');
-    }
-    console.log('User found:', user.email);
-    console.log('Stored Hashed Password:', user.password);
-    const isMatch = await bcrypt.compare(
-      logindata.password.trim(),
-      user.password,
-    );
-    console.log('Password Match:', isMatch);
-    if (!isMatch) {
-      console.error('Password mismatch for user:', logindata.email);
-      throw new UnauthorizedException('Invalid credentials');
-    }
-    const payload = { username: user.username, sub: user.id };
+
+    // Define a payload for the token
+    const payload = {
+      sub: savedUser.id,
+      username: savedUser.username,
+      userRole: savedUser.role,  // If you are using roles or other data
+    };
+
+    // Generate the token using the JWT service
     const token = await this.jwtService.signAsync(payload);
-    console.log('JWT Token generated for user:', user.email);
+
+    // Return the token along with a success message or user data if needed
     return {
       access_token: token,
     };
-  }*/
+  }
+
+  // Modified signIn method for user login and token generation
   async signIn(logindata: UserLoginDTO): Promise<{ access_token: string }> {
     const user = await this.userService.findOne(logindata);
     if (!user) {
