@@ -101,6 +101,11 @@ export class UserService {
     });
   }
 
+  // নতুন মেথড: সমস্ত ব্যবহারকারীর তথ্য রিটার্ন করার জন্য
+  async getAllUsers(): Promise<User[]> {
+    return await this.userRepo.find(); // কোনো শর্ত ছাড়াই সব ব্যবহারকারীর তথ্য রিটার্ন
+  }
+
   async forgetPassword(
     forgetPasswordDto: ForgetPasswordDto,
   ): Promise<{ message: string }> {

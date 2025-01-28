@@ -107,7 +107,6 @@ export class UserController {
     return this.userService.updatePassword(updatePasswordDto);
   }
 
-  // New route to get the logged-in user's profile
   @Get('profile')
   @UseGuards(AuthUserGuard)
   async getUserProfile(@Req() request: Request) {
@@ -122,5 +121,12 @@ export class UserController {
       throw new NotFoundException(`User with id=${userId} not found`);
     }
     return user;
+  }
+
+  // New route to get all users
+  @Get('all')
+  @UseGuards(AuthAdminGuard)
+  async getAllUsers() {
+    return await this.userService.getAllUsers();
   }
 }
