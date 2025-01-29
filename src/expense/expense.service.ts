@@ -259,4 +259,29 @@ export class ExpenseService {
 
     return this.expenseRepo.save(expense);
   }
+
+  // delete single category
+  async deleteCategory(userId: number, categoryKey: string): Promise<Expense> {
+    
+    const expense = await this.expenseRepo.findOne({
+      where: { user: { id: userId } },
+      select: ['id', 'data'],
+    });
+  
+    if (!expense) {
+      throw new NotFoundException(`Expense record for userId=${userId} not found`);
+    }
+  
+   
+    if (!(categoryKey in expense.data)) {
+      throw new NotFoundException(`Category '${categoryKey}' not found in user's expense data`);
+    }
+  
+   
+    delete expense.data[categoryKey];
+  
+    
+    return this.expenseRepo.save(expense);
+  }
+  
 }

@@ -175,4 +175,22 @@ export class ExpenseController {
       updateExpenseGoalDto.total_expense_goal,
     );
   }
+
+  @UseGuards(AuthUserGuard)
+@Patch('category/delete/:categoryKey')
+async deleteCategory(@Req() request: Request, @Param('categoryKey') categoryKey: string) {
+  const authenticatedUser = request['user'];
+
+  if (authenticatedUser.role === 'admin') {
+    throw new UnauthorizedException('Admin not allowed to delete user expenses');
+  }
+
+  if (!authenticatedUser) {
+    throw new UnauthorizedException('User not authenticated');
+  }
+
+  const userId = authenticatedUser.sub;
+  return this.expenseService.deleteCategory(userId, categoryKey);
+}
+
 }
