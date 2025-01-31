@@ -180,17 +180,42 @@ export class ExpenseController {
 @Patch('category/delete/:categoryKey')
 async deleteCategory(@Req() request: Request, @Param('categoryKey') categoryKey: string) {
   const authenticatedUser = request['user'];
+  console.log(authenticatedUser);
+  if (!authenticatedUser) {
+    throw new UnauthorizedException('User not authenticated');
+  }
 
   if (authenticatedUser.role === 'admin') {
     throw new UnauthorizedException('Admin not allowed to delete user expenses');
   }
 
-  if (!authenticatedUser) {
-    throw new UnauthorizedException('User not authenticated');
-  }
-
   const userId = authenticatedUser.sub;
+  console.log(userId);
   return this.expenseService.deleteCategory(userId, categoryKey);
 }
+
+
+
+// @UseGuards(AuthUserGuard)
+// @Patch('category/:categoryKey/subcategory')
+// async addSubcategory(
+//   @Req() request: Request,
+//   @Param('categoryKey') categoryKey: string,
+//   @Body() body: { subcategory: string; amount: number }
+// ) {
+//   const authenticatedUser = request['user'];
+
+//   if (authenticatedUser.role === 'admin') {
+//     throw new UnauthorizedException('Admin not allowed to modify user expenses');
+//   }
+
+//   if (!authenticatedUser) {
+//     throw new UnauthorizedException('User not authenticated');
+//   }
+
+//   const userId = authenticatedUser.sub;
+//   return this.expenseService.addSubcategory(userId, categoryKey, body.subcategory, body.amount);
+// }
+
 
 }
