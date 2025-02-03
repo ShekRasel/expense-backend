@@ -30,7 +30,6 @@ export class FeedbackController {
   }
 
   @Get('getFeedbacks')
-  @UseGuards(AuthAdminGuard)
   async getAllFeedback(): Promise<Feedback[]> {
     return this.feedbackService.getFeedbacks();
   }
