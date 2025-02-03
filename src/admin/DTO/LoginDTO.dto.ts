@@ -5,6 +5,7 @@ import {
   Length,
   Matches,
 } from 'class-validator';
+
 export class CreateAdminDto {
   @IsNotEmpty({ message: 'fullName is required' })
   @Length(8, 100, {
@@ -32,13 +33,38 @@ export class CreateAdminDto {
   })
   password: string;
 }
+
 export class LoginDTO {
-  @IsEmail() email: string;
-  @IsNotEmpty() password: string;
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  password: string;
 }
 
 export class PromoteAdminDTO {
   @IsEmail()
   @IsNotEmpty()
   email: string;
+}
+
+export class ForgetPasswordDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+}
+
+export class UpdatePasswordDto {
+  @IsNotEmpty()
+  @IsString()
+  oldPassword: string;
+  token: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, {
+    message:
+      'Passwords must be at least 8 characters, should include atleast one uppercase and one lowercase letter and a special character and a digit',
+  })
+  newPassword: string;
 }
