@@ -9,7 +9,7 @@ async function bootstrap() {
 
   // Enable CORS for multiple origins (frontend URLs)
   app.enableCors({
-    origin: ['http://localhost:3001', 'http://localhost:3002'], // Allow multiple frontend URLs
+    origin: ['https://expense-tracker-mu-puce.vercel.app/'], // Allow multiple frontend URLs
     methods: 'GET,POST,PUT,DELETE,PATCH', // Allowed methods
     allowedHeaders: 'Content-Type, Authorization', // Allowed headers
   });
