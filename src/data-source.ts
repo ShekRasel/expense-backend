@@ -8,11 +8,11 @@ import { Maintenance } from './entity/maintenance';
 
 const config = new DataSource({
   type: 'postgres',
-  host: 'dpg-cuvsvqbtq21c738ud4jg-a.oregon-postgres.render.com',
-  port: 5432,
-  username: 'my_post_gres',
-  password: 'RS6arUiPRN26HbtApSafagrGYsjvlXx4',
-  database: 'dev_u9qg',
+  host: 'yamabiko.proxy.rlwy.net',
+  port: 54282,
+  username: 'postgres',
+  password: 'njlpfTwbxZhGkfuNNpGKykcJoFwTimtO',
+  database: 'railway',
   entities: [User, Expense, Feedback, Guest, Admin, Maintenance],
   ssl: {
     rejectUnauthorized: false,
