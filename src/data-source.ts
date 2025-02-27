@@ -6,17 +6,18 @@ import { Guest } from 'src/entity/guest.entity';
 import { Admin } from 'src/entity/admin.entity';
 import { Maintenance } from './entity/maintenance';
 
-//import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 const config = new DataSource({
   type: 'postgres',
-  database: 'dev',
-  host: 'localhost',
+  host: 'dpg-cuvsvqbtq21c738ud4jg-a.oregon-postgres.render.com',
   port: 5432,
-  username: 'postgres',
-  password: '12345',
-  entities: [User, Expense, Feedback, Guest, Admin, Maintenance], // Path to your entities
-  //migrations: ['E:/finance/src/migrations/*.{ts,js}'], // Path to your migrations
-  synchronize: true, // Set to true only for development
+  username: 'my_post_gres',
+  password: 'RS6arUiPRN26HbtApSafagrGYsjvlXx4',
+  database: 'dev_u9qg',
+  entities: [User, Expense, Feedback, Guest, Admin, Maintenance],
+  ssl: {
+    rejectUnauthorized: false,
+  },
+  synchronize: true,
 });
 
 export default config;
